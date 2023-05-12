@@ -11,7 +11,7 @@ node *create_node(void);
 node *add_node(node *list, int val);
 void display_list(node *list);
 void free_list(node *list);
-// node delete(node *list, int val);
+int delete(node **list, int val);
 // node search(node *list);
 // void insert(node *new_node);
 // node *pop(node *list);
@@ -19,11 +19,14 @@ void free_list(node *list);
 int main(void)
 {
     node *list = create_node();
-    for (int i = 1; i < 100; i++)
+    for (int i = 1; i < 10; i++)
         add_node(list, i);
     
 
     display_list(list);
+    printf("Deleted node value: %d\n", delete(&list, 0));
+    display_list(list);
+
     free_list(list);
 }
 
@@ -74,4 +77,18 @@ void free_list(node *list)
     
     free_list(list->next);
     free(list);
+}
+
+int delete(node **list, int val)
+{   
+    // tmp instead holds address of node->next instead of the literal node
+    node **tmp = list;
+    while ((*tmp)->val != val)
+        tmp = &(*tmp)->next;
+    
+    node *del = *tmp;
+    *tmp = (*tmp)->next;
+    free(del);
+
+    return (*tmp)->val;       
 }
